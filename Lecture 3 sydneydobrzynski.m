@@ -40,4 +40,6 @@ histogram(january,edges);
 xlabel('Natural Gas Price ($/MMBtu)','FontSize',14);
 ylabel('Frequency','FontSize',14);
 legend('April','January');
-%what looks weird? the histograms for april and january are oddly similar
+%what looks weird? the histograms are pretty consistent where lower prices are more frequent in april and higher prices are more frequent
+%in january when demand for natural gas is higher; however there are some outliers: for instance, the price of $10 was more frequent in
+%april whereas the rest of the april prices seem to lie $5 and below
