@@ -40,3 +40,4 @@ histogram(january,edges);
 xlabel('Natural Gas Price ($/MMBtu)','FontSize',14);
 ylabel('Frequency','FontSize',14);
 legend('April','January');
+%what looks weird? the histograms for april and january are oddly similar
