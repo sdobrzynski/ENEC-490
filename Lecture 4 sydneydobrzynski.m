@@ -96,7 +96,7 @@ for i = 1:sim_years
     for j = 1:12
     
     %fill in the values of mc_sample one at a time
-    mc_sample() = s() + s()*randn(1);
+    mc_sample(12*(i-1)+j) = s(j,1) + s(j,2)*randn(1);
     
     end
 end
@@ -108,6 +108,6 @@ xlabel('Year','FontSize',14);
 ylabel('MC Demand (MWh)','FontSize',14);
 
 subplot(2,2,4);
-autocorr(response);
+autocorr(mc_sample);
 xlabel('Months','FontSize',14);
 ylabel('MC Autocorrelation','FontSize',14);
