@@ -84,15 +84,26 @@ xlabel('Months','FontSize',14);
 ylabel('BS Autocorrelation','FontSize',14);
 
 %montecarlo
-alpha = .25 + .5*rand(10000,1);
-lowerbound = min(data)+ randn(10000,1)*.3;
-upperbound = max(data)+ randn(10000,1)*.3;
-dose = 1:1:120;
-response = zeros(length(dose),1);
-for a = 1:length(dose)
-    response(a,1) = lowerbound+(upperbound-lowerbound)/(1+10.^(alpha-a));
+% find the mean and std. deviation of each calendar month over the 18 year period
+s = monthly_stats(d); % what size is s? what information is in each column? 
+
+%number of 'pretend' years you want to simulate
+sim_years = 10;
+% ouput
+mc_sample = zeros(sim_years*12,1);
+
+for i = 1:sim_years
+    for j = 1:12
+    
+    %fill in the values of mc_sample one at a time
+    mc_sample() = s() + s()*randn(1);
+    
+    end
 end
-subplot(2,2,3);plot(dose,response);
+
+
+subplot(2,2,3);
+plot(mc_sample);
 xlabel('Year','FontSize',14);
 ylabel('MC Demand (MWh)','FontSize',14);
 
