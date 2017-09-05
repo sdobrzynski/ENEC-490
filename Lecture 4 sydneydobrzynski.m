@@ -71,21 +71,32 @@ for i = 1:num_years
 end
 
 figure;
+%bootstrapping
+num_years = 10;
+bootstrap_sample = zeros(12*num_years,1);
+for i = 1:num_years
+    for j = 1:12
+    s = ceil(years*rand(1));
+    bootstrap_sample((i-1)*12+j) = d(j,s);
+    end
+end
+
+figure;
 %bootstrap sample
-subplot(2,2,1);
+subplot(3,2,1);
 plot(bootstrap_sample);
 xlabel('Year','FontSize',14);
 ylabel('BS Demand (MWh)','FontSize',14);
 
 %autocorrelation
-subplot(2,2,2);
+subplot(3,2,2);
 autocorr(bootstrap_sample);
 xlabel('Months','FontSize',14);
 ylabel('BS Autocorrelation','FontSize',14);
 
 %montecarlo
 % find the mean and std. deviation of each calendar month over the 18 year period
-s = monthly_stats(d); % what size is s? what information is in each column? 
+s = monthly_stats(d); 
 
 %number of 'pretend' years you want to simulate
 sim_years = 10;
@@ -102,12 +113,18 @@ for i = 1:sim_years
 end
 
 
-subplot(2,2,3);
+subplot(3,2,3);
 plot(mc_sample);
 xlabel('Year','FontSize',14);
 ylabel('MC Demand (MWh)','FontSize',14);
 
-subplot(2,2,4);
+subplot(3,2,4);
 autocorr(mc_sample);
 xlabel('Months','FontSize',14);
 ylabel('MC Autocorrelation','FontSize',14);
+
+%the monte carlo method shows a repeated pattern over the years whereas the bootstrapping shows a more random demand with no pattern
+%the autocorrelations are pretty similar to each other as well as to the original data
+
+subplot(3,2,6);
+autocorr(data);
