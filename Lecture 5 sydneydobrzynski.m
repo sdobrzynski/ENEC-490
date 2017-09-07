@@ -94,3 +94,4 @@ end
 peakdata = max(M,[],2);
 tempdata = csvread('tempdata.csv');
 scatter(tempdata(:,2),peakdata);
+%when the temperature is at the extremes(really high or really low) the energy demand is higher
