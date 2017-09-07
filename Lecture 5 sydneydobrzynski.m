@@ -85,10 +85,12 @@ end
 find(outliers>0)
 
 %data mining
-peakdata = zeros(365,1);
+M = zeros(365,24);
 for i = 1:365
-    peakdata(i)=max(transformed_data((365*(i-1)+1):(365*i)));
+    for j = 1:24
+        M(i,j)=(transformed_data(24*(i-1)+j));
+    end
 end
-
-tempdata = csvread('tempdata.csv',2);
-scatter(tempdata,peakdata);
+peakdata = max(M,[],2);
+tempdata = csvread('tempdata.csv');
+scatter(tempdata(:,2),peakdata);
