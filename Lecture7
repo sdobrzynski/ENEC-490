@@ -10,3 +10,11 @@ for i = 1:length(coal_2015)
     bins((year-1924),1) = bins((year-1924),1)+coal_2015(i,3)
 end
 
+bar(bins,'FaceColor', [.8 .8 .8],'EdgeColor', [.7 .7 .7], 'LineWidth', .01)
+
+ax=gca;
+ax.XTick = ([1 11 21 31 41 51 61 71 81 91]);
+ax.XTickLabel = ({'1925', '1935', '1945', '1955', '1965', '1975', '1985', '1995', '2005', '2015'});
+xlabel('Year');
+ylabel('Capacity (MW)');
+set(ax, 'FontSize',12);
