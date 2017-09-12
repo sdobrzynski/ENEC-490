@@ -10,6 +10,7 @@ for i = 1:length(coal_2015)
     bins((year-1924),1) = bins((year-1924),1)+coal_2015(i,3)
 end
 
+hold on
 bar(bins,'FaceColor', [.8 .8 .8],'EdgeColor', [.7 .7 .7], 'LineWidth', .01)
 
 ax=gca;
@@ -18,3 +19,10 @@ ax.XTickLabel = ({'1925', '1935', '1945', '1955', '1965', '1975', '1985', '1995'
 xlabel('Year');
 ylabel('Capacity (MW)');
 set(ax, 'FontSize',12);
+
+retiredbins = zeros(91,1);
+for i = 1:length(retired)
+    year = retired(i,4)
+    retiredbins((year-1924),1) = retiredbins((year-1924),1)+retired(i,3)
+end
+
