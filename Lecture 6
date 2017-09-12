@@ -53,3 +53,110 @@ jul_avg = mean(july);
 figure;
 plot(jan_avg);
 plot(jul_avg);
+
+%2.
+
+figure;
+
+%1 = Sun
+week_days = zeros(365:1);
+j = 4;
+for i = 1:365
+    week_days(i,1) = j;
+    j = j+1; 
+    if j > 7
+       j = 1;
+    end    
+end
+
+
+%Sunday
+sunday = zeros(1,1);
+j=1;
+for i = 1:365
+    if week_days(i,1) == 1
+        sunday(j) = peak(i,1);
+        j = j+1;
+    end
+end
+subplot(3,3,1);
+boxplot(sunday);
+title('Sunday');
+
+%Monday
+monday = zeros(1,1);
+j=1;
+for i = 1:365
+    if week_days(i,1) == 2
+        monday(j) = peak(i,1);
+        j = j+1;
+    end
+end  
+subplot(3,3,2);
+boxplot(monday);
+title('Monday');
+
+%Tuesday
+tuesday = zeros(1,1);
+j=1;
+for i = 1:365
+    if week_days(i,1) == 3
+        tuesday(j) = peak(i,1);
+        j = j+1;
+    end
+end
+subplot(3,3,3);
+boxplot(tuesday);
+title('Tuesday');
+        
+%Wednesday
+wednesday = zeros(1,1);
+j=1;
+for i = 1:365
+    if week_days(i,1) == 4
+        wednesday(j) = peak(i,1);
+        j = j+1;
+    end
+end 
+subplot(3,3,4);
+boxplot(wednesday);
+title('Wednesday');
+    
+%Thursday
+thursday = zeros(1,1);
+j=1;
+for i = 1:365
+    if week_days(i,1) == 5
+        thursday(j) = peak(i,1);
+        j = j+1;
+    end
+end 
+subplot(3,3,5);
+boxplot(thursday);
+title('Thursday');
+
+%Friday
+friday = zeros(1,1);
+j=1;
+for i = 1:365
+    if week_days(i,1) == 6
+        friday(j) = peak(i,1);
+        j = j+1;
+    end
+end 
+subplot(3,3,6);
+boxplot(friday);
+title('Friday');
+
+%Saturday
+saturday = zeros(1,1);
+j=1;
+for i = 1:365
+    if week_days(i,1) == 7
+        saturday(j) = peak(i,1);
+        j = j+1;
+    end
+end 
+subplot(3,3,8);
+boxplot(saturday);
+title('Saturday');
