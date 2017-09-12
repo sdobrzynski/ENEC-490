@@ -52,3 +52,4 @@ jul_avg = mean(july);
 
 figure;
 plot(jan_avg);
+plot(jul_avg);
