@@ -26,3 +26,4 @@ for i = 1:length(retired)
     retiredbins((year-1924),1) = retiredbins((year-1924),1)+retired(i,3)
 end
 
+bar(retiredbins, 'FaceColor', [.7 .4 .3], 'EdgeColor', [.2 .5 .8], 'LineWidth', .01);
