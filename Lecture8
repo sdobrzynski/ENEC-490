@@ -69,3 +69,6 @@ figure;
 boxplot(monthly_matrix','Labels',{'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'});
 xlabel('Month','FontSize',14);
 ylabel('Log Natural Gas Price $/MMBtu','FontSize',14);
+
+figure;
+plot(data);
