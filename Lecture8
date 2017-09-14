@@ -42,7 +42,10 @@ back_transformed = exp(sample);
 histogram(back_transformed,edges);
 label_1 = strcat(months{idx},' - Highest Mean');
 
+
 %lowest mean
-idx = find(stats(:,1)==min(stats(:,1)));
-sample = stats(idx,1) + stats(idx,2)*randn(1000,1);
-back_transformed = exp(sample);
+idx_min = find(stats(:,1) == min(stats(:,1)));
+sample_min = stats(idx_min,1) + stats(idx_min,2)*randn(1000,1);
+back_transformed_min = exp(sample_min);
+histogram(back_transformed_min, edges);
+label_2 = strcat(months{idx_min}, ' - Lowest Mean');
