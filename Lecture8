@@ -42,10 +42,25 @@ back_transformed = exp(sample);
 histogram(back_transformed,edges);
 label_1 = strcat(months{idx},' - Highest Mean');
 
-
 %lowest mean
-idx_min = find(stats(:,1) == min(stats(:,1)));
-sample_min = stats(idx_min,1) + stats(idx_min,2)*randn(1000,1);
-back_transformed_min = exp(sample_min);
-histogram(back_transformed_min, edges);
-label_2 = strcat(months{idx_min}, ' - Lowest Mean');
+idx_lm = find(stats(:,1)== min(stats(:,1)));
+sample_lm = stats(idx_lm,1) + stats(idx_lm,2)*randn(1000,1);
+back_transformed2 = exp(sample_lm);
+histogram(back_transformed2,edges);
+label_2 = strcat(months{idx_lm},'- Lowest Mean');
+
+%highest stdev
+idx_hs = find(stats(:,2) == max(stats(:,2)));
+sample_hs = stats(idx_hs,1) + stats(idx_hs,2)*randn(1000,1);
+back_transformed3 = exp(sample_hs);
+histogram(back_transformed3,edges);
+label_3 = strcat(months{idx_hs},' - Highest Stdev');
+
+%lowest stdev
+idx_ls = find(stats(:,2) == min(stats(:,2)));
+sample_ls = stats(idx_ls,1) + stats(idx_ls,2)*randn(1000,1);
+back_transformed4 = exp(sample_ls);
+histogram(back_transformed4,edges);
+label_4 = strcat(months{idx_ls},' - Lowest Stdev');
+
+legend(label_1,label_2,label_3,label_4);
