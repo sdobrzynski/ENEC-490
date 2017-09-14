@@ -1,0 +1,48 @@
+%Lecture8
+
+%import relevant data 
+[data text combined] = xlsread('N3045US3m','Data 1','A4:B183');
+
+%histogram of 2002-2016 gas price data
+histogram(data); 
+
+%log transformation
+transformed_data = log(data);
+
+%histogram of log transformed data
+histogram(transformed_data); 
+xlabel('Log Natural Gas Price ($/MMBtu)','FontSize',14);
+ylabel('Frequency','FontSize',14);
+
+%number of years in dataset
+years = length(data)/12;
+
+%convert to 12 x N matrix
+monthly_matrix = vec2mat(transformed_data,12,years);
+
+% mean and standard deviation of log-transformed data by month
+stats = zeros(12,2);
+for i = 1:12
+    stats(i,1) = mean(monthly_matrix(i,:));
+    stats(i,2) = std(monthly_matrix(i,:));
+end
+
+%identify months
+months = {'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'};
+
+figure; 
+hold on;
+%bin 'edges'
+edges = 0:0.5:30;
+
+%highest mean
+idx = find(stats(:,1) == max(stats(:,1)));
+sample = stats(idx,1) + stats(idx,2)*randn(1000,1);
+back_transformed = exp(sample);
+histogram(back_transformed,edges);
+label_1 = strcat(months{idx},' - Highest Mean');
+
+%lowest mean
+idx = find(stats(:,1)==min(stats(:,1)));
+sample = stats(idx,1) + stats(idx,2)*randn(1000,1);
+back_transformed = exp(sample);
