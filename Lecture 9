@@ -36,3 +36,22 @@ ncsunprob = sum(ncsunplants)/sum(sunplants);
 solarncplants = a+b;
 num = find(solarncplants(:,1)==2);
 prob = length(num)/sum(b);
+
+%7bii
+sunncprob = sum(ncsunplants)/sum(ncplants);
+
+%7biii
+
+ncsuncfplants = zeros(length(text),1);
+
+anothercfplants = zeros(length(text),1);
+for k = 1:length(cf_plants)
+anothercfplants(cf_plants(k)) = 1;
+end
+
+for j = 1:length(text)
+    if ncsunplants(j)==1 && anothercfplants(j)==1
+        ncsuncfplants(j) = 1;
+    end
+end
+ncsuncfprob = sum(ncsuncfplants)/length(text);
