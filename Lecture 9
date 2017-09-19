@@ -14,3 +14,7 @@ state_prob = sum(a)/length(data);
 % fuel probabilities
 b = strcmp(fuel,text(:,2));
 fuel_prob = sum(b)/length(data);
+
+%capfact  probabilities
+cf_plants = find(data(:,1)>=cf);
+cf_prob = length(cf_plants)/length(data);
