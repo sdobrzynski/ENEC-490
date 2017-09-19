@@ -31,3 +31,8 @@ for i = 1:length(ncplants)
 end
 
 ncsunprob = sum(ncsunplants)/sum(sunplants);
+
+%7bi
+solarncplants = a+b;
+num = find(solarncplants(:,1)==2);
+prob = length(num)/sum(b);
