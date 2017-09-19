@@ -18,3 +18,16 @@ fuel_prob = sum(b)/length(data);
 %capfact  probabilities
 cf_plants = find(data(:,1)>=cf);
 cf_prob = length(cf_plants)/length(data);
+
+%7bi
+ncplants = strcmp(state,text(:,1));
+sunplants = strcmp(fuel,text(:,2));
+ncsunplants = zeros(length(ncplants),1);
+
+for i = 1:length(ncplants)
+    if ncplants(i)==1 && sunplants(i)==1
+        ncsunplants(i) = 1;
+    end
+end
+
+ncsunprob = sum(ncsunplants)/sum(sunplants);
