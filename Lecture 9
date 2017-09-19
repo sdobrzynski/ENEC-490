@@ -1,0 +1,13 @@
+%Lecture9
+
+[data text combined]  = xlsread('state_fuel_cf.xlsx');
+
+%conditional 
+state = 'NC';
+fuel = 'SUN';
+cf = .20;
+
+% state probabilities
+a = strcmp(state,text(:,1));
+state_plants = find(a(:,1)>0);
+state_prob = length(state_plants)/length(data);
