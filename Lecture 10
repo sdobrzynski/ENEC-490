@@ -1,0 +1,37 @@
+%Lecture10
+
+data=xlsread('catawba_data.xlsx');
+
+temps = data(:,4);
+flows = data(:,5);
+
+days=length(temps);
+
+W = zeros(days,1); 
+losses = zeros(days,1);
+
+for i = 1:days
+    
+    W(i) = (33.3/(1+exp(.15*(16.9-temps(i)))) + 127/flows(i));
+    
+    if W(i) > 37 && W(i) <= 40
+    losses(i) = .25*2000*24;
+    elseif W(i) > 40 && W(i) <= 42
+    losses(i) = .50*2000*24;
+    elseif W(i) > 42
+    losses(i) = 2000*24;
+    end
+        
+end
+
+losses_dollars = (losses*100)/1000;
+
+annual_losses = zeros(41,1);
+
+for i = 1:41
+    annual_losses(i) = sum(losses_dollars((i-1)*365+1:(i-1)*365+365));
+end
+
+sorted_losses = sort(annual_losses);
+idx = round(.95*41);
+CVar = sorted_losses(idx);
