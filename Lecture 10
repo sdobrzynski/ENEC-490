@@ -48,8 +48,9 @@ whitened_flows = (log_flows - avg_logflows)/std_logflows;
 cc_mu = 0.9*avg_logflows;
 cc_st_f = 1.2*std_logflows;
 
-S = exp((cc_mu + cc_st_f)*whitened_flows);
-
+S = exp(cc_mu + (cc_st_f*whitened_flows));
+W = zeros(days,1); 
+cc_losses = zeros(days,1);
 for i = 1:days
     
     W(i) = (33.3/(1+exp(.15*(16.9-clim_temp(i)))) + 127/S(i));
