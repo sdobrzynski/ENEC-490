@@ -35,3 +35,54 @@ end
 sorted_losses = sort(annual_losses);
 idx = round(.95*41);
 CVar = sorted_losses(idx);
+
+% Climate set of data
+
+clim_temp = temps + 2;
+log_flows = log(flows);
+avg_logflows = mean(log_flows);
+std_logflows = std(log_flows);
+
+whitened_flows = (log_flows - avg_logflows)/std_logflows;
+
+cc_mu = 0.9*avg_logflows;
+cc_st_f = 1.2*std_logflows;
+
+S = exp((cc_mu + cc_st_f)*whitened_flows);
+
+for i = 1:days
+    
+    W(i) = (33.3/(1+exp(.15*(16.9-clim_temp(i)))) + 127/S(i));
+    
+    if W(i) > 37 && W(i) <= 40
+    cc_losses(i) = .25*2000*24;
+    elseif W(i) > 40 && W(i) <= 42
+    cc_losses(i) = .50*2000*24;
+    elseif W(i) > 42
+    cc_losses(i) = 2000*24;
+    end
+        
+end
+
+cc_losses_dollars = (cc_losses*100)/1000;
+annual_losses_cc = zeros(41,1);
+
+for i = 1:41
+    annual_losses_cc(i) = sum(cc_losses_dollars((i-1)*365+1:(i-1)*365+365));
+end
+
+sorted_losses_cc = sort(annual_losses_cc);
+idx_cc = round(.95*41);
+CVar = sorted_losses_cc(idx_cc);
+
+% create common edges of bins for both histograms
+b = ceil(max(annual_losses_cc)/100000)*100000;
+edges = [0:10000:b];
+
+figure; 
+hold on; 
+histogram(annual_losses,edges);
+histogram(annual_losses_cc,edges);
+ylabel('Frequency','FontSize',14);
+xlabel('Losses $1000s','FontSize',14);
+legend('1970-2010','Climate Change');
