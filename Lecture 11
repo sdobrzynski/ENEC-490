@@ -17,21 +17,22 @@ X = [ones(length(t_CDD),1) t_CDD t_HDD];
 
 [BETA,SIGMA,RESID]=mvregress(X,t_demand);
 
-v_predict = zeros(length(v_temps),1);
-for i = 1:length(v_temps)
-    v_predict(i) = BETA(1)+BETA(2)*v_CDD(i)+(BETA(3)*v_HDD(i));
-end
+l= length(v_demand);
+v_predict = zeros(l,1);
+for i = 1:l
+   v_predict(i)= BETA(1)+ (BETA(2)*v_CDD(i)) + (BETA(3)*v_HDD(i));
+end 
 
-scatter(v_predict,v_demand);
+scatter(v_predict, v_demand)
 
-SSE = 0;
-SST = 0;
-for j = 1:length(v_predict)
-    SSE = SSE + (v_demand(j) - v_predict(j))^2;
-end
+R2 = 1-sum((v_predict - v_demand).^2)/sum((v_demand - mean(v_demand)).^2);
 
-for k = 1:length(v_predict)
-    SST = SST + (v_demand(k) - mean(v_demand))^2;
-end
+residuals = v_predict - v_demand;
+RMSE = sqrt(sum(residuals.^2)/length(v_demand));
 
-Correlation_Coefficient = 1 - SSE/SST;
+[R2 RMSE^.5]
+
+figure;
+scatter(v_demand, residuals);
+xlabel('Actual Demand (MWh)', 'FontSize',14);
+ylabel ('Residuals (MWh)', 'FontSize', 14);
