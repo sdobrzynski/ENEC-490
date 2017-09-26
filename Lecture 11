@@ -1,0 +1,18 @@
+%Lecture11
+
+% data=xlsread('temp_demand.xlsx');
+t_data = xlsread('temp_demand.xlsx','training');
+v_data = xlsread('temp_demand.xlsx','validation');
+t_temps = t_data(:,1);
+t_demand = t_data(:,3);
+v_temps = v_data(:,1);
+v_demand = v_data(:,3);
+
+t_CDD = max(t_temps - 65,0);
+t_HDD = max(65 - t_temps,0);
+v_CDD = max(v_temps - 65,0);
+v_HDD = max(65 - v_temps,0);
+
+X = [ones(length(t_CDD),1) t_CDD t_HDD];
+
+[BETA,SIGMA,RESID]=mvregress(X,t_demand);
