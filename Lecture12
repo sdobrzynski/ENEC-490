@@ -1,0 +1,58 @@
+%Lecture12
+
+data=xlsread('peak_forecasting.xlsx','RegressionData');
+insample = data(1:9,:);
+outsample = data(10:end,:);
+
+Y = insample(:,2);
+X = [ones(length(Y),1) insample(:,3:end)];
+coeff = mvregress(X,Y);
+
+
+% predicted
+predicted = coeff(1) + coeff(2)*outsample(:,3) + coeff(3)*outsample(:,4) + coeff(4)*outsample(:,5) + coeff(5)*outsample(:,6);
+
+% actual
+actual = outsample(:,2);
+
+% scatterplot
+scatter(actual,predicted);
+
+% RMSE
+sq_errors = (predicted - actual).^2;  % Squared Errors
+RMSE = sqrt(mean((sq_errors)));   % Root Mean Squared Error
+
+%historical temps
+data = xlsread('peak_forecasting.xlsx','HistoricalTemps');
+temp_data = data(:,2);
+years = floor(length(data)/365);
+annual_peak = zeros(years,1);
+
+%collect the hottest temperature from each calendar year
+for i = 1:years
+    annual = temp_data((i-1)*365+1:(i-1)*365+365);
+    annual_peak(i) = max(annual);
+end
+%Estimate the parameters of the peak temperature distribution
+annual_peak_stdev = std(annual_peak);
+annual_peak_mean = mean(annual_peak);
+
+%predicted 2020
+twentytwentydata = xlsread('peak_forecasting.xlsx','Predictions');
+econ = twentytwentydata(5,2);
+pop = twentytwentydata(5,3);
+eff = twentytwentydata(5,4);
+
+guess = coeff(1)+coeff(2)*econ+coeff(3)*pop+coeff(4)*eff
+monte = annual_peak_mean+annual_peak_stdev*randn(1000,1);
+tpredict = zeros(1000,1);
+for i = 1:1000
+    tpredict(i) = guess + coeff(5)*monte(i)
+end
+
+RM = ((25000-tpredict)/25000)*100;
+histogram(RM);
+xlabel('Reserve Margin (%)','FontSize',14);
+ylabel('Frequency (out of 1000)','FontSize',14);
+
+sum(RM<15)/1000
