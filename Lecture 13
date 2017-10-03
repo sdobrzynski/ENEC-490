@@ -19,3 +19,24 @@ title('Summer')
 subplot(2,2,3)
 autocorr(v(6000:7200));
 title('Fall')
+
+%3. peaks
+peaks = zeros(365,1);
+for i = 1:365
+    peaks(i) = max(data(i,:));
+end
+
+figure;
+autocorr(peaks(1:365));
+
+%4. 
+
+%5. Difference the data
+diff = zeros(364,1);
+for i = 1:364
+    diff(i) = (peaks(i+1)-peaks(i))
+end
+
+figure;
+plot(diff);
+
