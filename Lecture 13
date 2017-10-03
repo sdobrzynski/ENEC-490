@@ -40,3 +40,18 @@ end
 figure;
 plot(diff);
 
+
+%smoothing
+avg = zeros(335,1);
+for i = 1:335
+    avg(i) = mean(peak(i:i+30))
+end
+
+trunk = peak(16:350);
+
+figure;
+hold on;
+plot(trunk);
+plot(avg);
+
+smoothed = trunk - avg;
