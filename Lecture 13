@@ -6,5 +6,16 @@ v = mat2vec(data);
 
 %winter
 figure;
+subplot(2,2,1)
 autocorr(v(1:1200));
+title('Winter')
 
+%summer
+subplot(2,2,2)
+autocorr(v(4000:5200));
+title('Summer')
+
+%fall
+subplot(2,2,3)
+autocorr(v(6000:7200));
+title('Fall')
