@@ -1,0 +1,10 @@
+%Lecture13
+
+%Read electricity demand data
+data = csvread('hourly-day-ahead-bid-data-2015.csv',5,1);
+v = mat2vec(data);
+
+%winter
+figure;
+autocorr(v(1:1200));
+
