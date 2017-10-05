@@ -55,3 +55,14 @@ plot(trunk);
 plot(avg);
 
 smoothed = trunk - avg;
+
+%Residual
+Residual = zeros(335,1);
+
+for i = 1:length(Residual)
+    Residual(i)=peaks(i)-smoothed(i);
+end
+
+%autocorrelation of Residuals
+figure;
+autocorr(Residual)
