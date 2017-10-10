@@ -1,0 +1,270 @@
+data = xlsread('winddata.xlsx');
+
+figure; 
+histogram(data);
+xlabel('Wind Power Production (MWh)','FontSize',14);
+ylabel('Frequency','FontSize',14);
+
+figure;
+log_data = log(data+1);
+histogram(log_data); 
+xlabel('Log Transformed Wind Power Production (MWh)','FontSize',14);
+ylabel('Frequency','FontSize',14);
+
+% calculate monthly statistics 
+
+hours = length(data);
+days = hours/24;
+years = days/365;
+
+jan = zeros(years*31*24,1);
+feb = zeros(years*28*24,1);
+mar = zeros(years*31*24,1);
+apr = zeros(years*30*24,1);
+may = zeros(years*31*24,1);
+jun = zeros(years*30*24,1);
+jul = zeros(years*31*24,1);
+aug = zeros(years*31*24,1);
+sep = zeros(years*30*24,1);
+oct = zeros(years*31*24,1);
+nov = zeros(years*30*24,1);
+dec = zeros(years*31*24,1);
+
+
+% separate data into months
+for i = 1:years
+   
+            jan((i-1)*744+1:(i-1)*744 + 744) = log_data((i-1)*8760 + 1:(i-1)*8760+ 744); 
+            feb((i-1)*672+1:(i-1)*672 + 672) = log_data((i-1)*8760 + 745:(i-1)*8760+ 1416);
+            mar((i-1)*744+1:(i-1)*744 + 744) = log_data((i-1)*8760 + 1417:(i-1)*8760+ 2160);
+            apr((i-1)*720+1:(i-1)*720 + 720) = log_data((i-1)*8760 + 2161:(i-1)*8760+ 2880);
+            may((i-1)*744+1:(i-1)*744 + 744) = log_data((i-1)*8760 + 2881:(i-1)*8760+ 3624);
+            jun((i-1)*720+1:(i-1)*720 + 720) = log_data((i-1)*8760 + 3625:(i-1)*8760+ 4344);
+            jul((i-1)*744+1:(i-1)*744 + 744) = log_data((i-1)*8760 + 4345:(i-1)*8760+ 5088);
+            aug((i-1)*744+1:(i-1)*744 + 744) = log_data((i-1)*8760 + 5089:(i-1)*8760+ 5832);
+            sep((i-1)*720+1:(i-1)*720 + 720) = log_data((i-1)*8760 + 5833:(i-1)*8760+ 6552);
+            oct((i-1)*744+1:(i-1)*744 + 744) = log_data((i-1)*8760 + 6553:(i-1)*8760+ 7296);
+            nov((i-1)*720+1:(i-1)*720 + 720) = log_data((i-1)*8760 + 7297:(i-1)*8760+ 8016);
+            dec((i-1)*744+1:(i-1)*744 + 744) = log_data((i-1)*8760 + 8017:(i-1)*8760+ 8760);    
+            
+end
+
+% mean for each month 
+mu_jan = mean(jan);
+mu_feb = mean(feb);
+mu_mar = mean(mar);
+mu_apr = mean(apr);
+mu_may = mean(may);
+mu_jun = mean(jun);
+mu_jul = mean(jul);
+mu_aug = mean(aug);
+mu_sep = mean(sep);
+mu_oct = mean(oct);
+mu_nov = mean(nov);
+mu_dec = mean(dec);
+
+mus = [mu_jan mu_feb mu_mar mu_apr mu_may mu_jun mu_jul mu_aug mu_sep mu_oct mu_nov mu_dec];
+
+figure; 
+bar(mus);
+xlabel('Month','FontSize',14);
+ylabel('Mean Log Wind Power','FontSize',14);
+ax=gca;
+ax.XTick=(1:1:12);
+ax.XTickLabel=({'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'});
+
+
+% std deviation for each month
+std_jan = std(jan);
+std_feb = std(feb);
+std_mar = std(mar);
+std_apr = std(apr);
+std_may = std(may);
+std_jun = std(jun);
+std_jul = std(jul);
+std_aug = std(aug);
+std_sep = std(sep);
+std_oct = std(oct);
+std_nov = std(nov);
+std_dec = std(dec);
+
+
+N = zeros(length(data),1);
+
+% remove seasonality
+for i = 1:years
+    
+            N((i-1)*8760 + 1:(i-1)*8760+ 744) = (log_data((i-1)*8760 + 1:(i-1)*8760+ 744)-mu_jan)/std_jan; 
+            N((i-1)*8760 + 745:(i-1)*8760+ 1416) = (log_data((i-1)*8760 + 745:(i-1)*8760+ 1416)-mu_feb)/std_feb; 
+            N((i-1)*8760 + 1417:(i-1)*8760+ 2160) = (log_data((i-1)*8760 + 1417:(i-1)*8760+ 2160) - mu_mar)/std_mar;
+            N((i-1)*8760 + 2161:(i-1)*8760+ 2880) = (log_data((i-1)*8760 + 2161:(i-1)*8760+ 2880)-mu_apr)/std_apr;
+            N((i-1)*8760 + 2881:(i-1)*8760+ 3624) = (log_data((i-1)*8760 + 2881:(i-1)*8760+ 3624)-mu_may)/std_may;
+            N((i-1)*8760 + 3625:(i-1)*8760+ 4344) = (log_data((i-1)*8760 + 3625:(i-1)*8760+ 4344)-mu_jun)/std_jun;
+            N((i-1)*8760 + 4345:(i-1)*8760+ 5088) = (log_data((i-1)*8760 + 4345:(i-1)*8760+ 5088)-mu_jul)/std_jul;
+            N((i-1)*8760 + 5089:(i-1)*8760+ 5832) = (log_data((i-1)*8760 + 5089:(i-1)*8760+ 5832)-mu_aug)/std_aug;
+            N((i-1)*8760 + 5833:(i-1)*8760+ 6552) = (log_data((i-1)*8760 + 5833:(i-1)*8760+ 6552)-mu_sep)/std_sep;
+            N((i-1)*8760 + 6553:(i-1)*8760+ 7296) = (log_data((i-1)*8760 + 6553:(i-1)*8760+ 7296)-mu_oct)/std_oct;
+            N((i-1)*8760 + 7297:(i-1)*8760+ 8016) = (log_data((i-1)*8760 + 7297:(i-1)*8760+ 8016)-mu_nov)/std_nov;
+            N((i-1)*8760 + 8017:(i-1)*8760+ 8760) = (log_data((i-1)*8760 + 8017:(i-1)*8760+ 8760)-mu_dec)/std_dec;    
+end
+
+%plot de-seasoned
+figure; 
+plot(N);
+xlabel('Hours','FontSize',14);
+ylabel('De-Seasoned, Log Transformed Wind','FontSize',14);
+
+% convert to daily mean
+jan_days = length(jan)/24;
+feb_days = length(feb)/24;
+mar_days = length(mar)/24;
+apr_days = length(apr)/24;
+may_days = length(may)/24;
+jun_days = length(jun)/24;
+jul_days = length(jul)/24;
+aug_days = length(aug)/24;
+sep_days = length(sep)/24;
+oct_days = length(oct)/24;
+nov_days = length(nov)/24;
+dec_days = length(dec)/24;
+
+daily_jan = zeros(jan_days,1);
+daily_feb = zeros(feb_days,1);
+daily_mar = zeros(mar_days,1);
+daily_apr = zeros(apr_days,1);
+daily_may = zeros(may_days,1);
+daily_jun = zeros(jun_days,1);
+daily_jul = zeros(jul_days,1);
+daily_aug = zeros(aug_days,1);
+daily_sep = zeros(sep_days,1);
+daily_oct = zeros(oct_days,1);
+daily_nov = zeros(nov_days,1);
+daily_dec = zeros(dec_days,1);
+
+for i=1:length(jan)/24
+    daily_jan(i) = mean(jan((i-1)*24+1:(i-1)*24+24));
+    daily_mar(i) = mean(mar((i-1)*24+1:(i-1)*24+24));
+    daily_may(i) = mean(may((i-1)*24+1:(i-1)*24+24));
+    daily_jul(i) = mean(jul((i-1)*24+1:(i-1)*24+24));
+    daily_aug(i) = mean(aug((i-1)*24+1:(i-1)*24+24));
+    daily_oct(i) = mean(oct((i-1)*24+1:(i-1)*24+24));
+    daily_dec(i) = mean(dec((i-1)*24+1:(i-1)*24+24));
+end
+
+for i=1:length(feb)/24
+    daily_feb(i) = mean(feb((i-1)*24+1:(i-1)*24+24));
+end
+
+for i=1:length(apr)/24
+    daily_apr(i) = mean(apr((i-1)*24+1:(i-1)*24+24));
+    daily_jun(i) = mean(jun((i-1)*24+1:(i-1)*24+24));
+    daily_sep(i) = mean(sep((i-1)*24+1:(i-1)*24+24));
+    daily_nov(i) = mean(nov((i-1)*24+1:(i-1)*24+24));
+end
+
+acf = zeros(22,12);
+[acf(:,1)] = autocorr(daily_jan,21);
+[acf(:,2)] = autocorr(daily_feb,21);
+[acf(:,3)] = autocorr(daily_mar,21);
+[acf(:,4)] = autocorr(daily_apr,21);
+[acf(:,5)] = autocorr(daily_may,21);
+[acf(:,6)] = autocorr(daily_jun,21);
+[acf(:,7)] = autocorr(daily_jul,21);
+[acf(:,8)] = autocorr(daily_aug,21);
+[acf(:,9)] = autocorr(daily_sep,21);
+[acf(:,10)] = autocorr(daily_oct,21);
+[acf(:,11)] = autocorr(daily_nov,21);
+[acf(:,12)] = autocorr(daily_dec,21);
+
+
+% plot daily autocorrelation
+figure; 
+hold on; 
+for i = 1:12
+    plot(acf(:,i));
+end
+legend('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+xlabel('Lags (days)','FontSize',14);
+ylabel('Autocorrelation','FontSize',14);
+
+
+
+% ##################################################
+% # START HERE: Remove daily means and find diurnal 
+% #signal. Create [24x12] matrix called 'diurnal' that stores 
+% #the signal for each month
+
+
+
+
+% ##################################################
+
+
+
+
+figure;
+plot(diurnal);
+xlabel('Hour','FontSize',14);
+ylabel('Zero Centered Signal','FontSize',14);
+legend('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+
+
+% remove diurnal signal to find hourly noise 
+hnoise_jan = zeros(length(jan),1);
+
+for i = 1:length(jan)/24
+    
+    hnoise_jan((i-1)*24+1:(i-1)*24+24) = jan((i-1)*24+1:(i-1)*24+24) - diurnal(:,1);
+    hnoise_mar((i-1)*24+1:(i-1)*24+24) = mar((i-1)*24+1:(i-1)*24+24) - diurnal(:,3);
+    hnoise_may((i-1)*24+1:(i-1)*24+24) = may((i-1)*24+1:(i-1)*24+24) - diurnal(:,5);
+    hnoise_jul((i-1)*24+1:(i-1)*24+24) = jul((i-1)*24+1:(i-1)*24+24) - diurnal(:,7);
+    hnoise_aug((i-1)*24+1:(i-1)*24+24) = aug((i-1)*24+1:(i-1)*24+24) - diurnal(:,8);
+    hnoise_oct((i-1)*24+1:(i-1)*24+24) = oct((i-1)*24+1:(i-1)*24+24) - diurnal(:,10);
+    hnoise_dec((i-1)*24+1:(i-1)*24+24) = dec((i-1)*24+1:(i-1)*24+24) - diurnal(:,12);
+    
+end
+
+for i = 1:length(apr)/24
+    
+    hnoise_apr((i-1)*24+1:(i-1)*24+24) = apr((i-1)*24+1:(i-1)*24+24) - diurnal(:,4);
+    hnoise_jun((i-1)*24+1:(i-1)*24+24) = jun((i-1)*24+1:(i-1)*24+24) - diurnal(:,6);
+    hnoise_sep((i-1)*24+1:(i-1)*24+24) = sep((i-1)*24+1:(i-1)*24+24) - diurnal(:,9);
+    hnoise_nov((i-1)*24+1:(i-1)*24+24) = nov((i-1)*24+1:(i-1)*24+24) - diurnal(:,11);
+      
+end
+
+for i = 1:length(feb)/24
+    
+    hnoise_feb((i-1)*24+1:(i-1)*24+24) = feb((i-1)*24+1:(i-1)*24+24) - diurnal(:,2);
+
+end
+
+% Hourly noise
+plot(hnoise_jan)
+xlabel('Hours','FontSize',14);
+ylabel('Residuals','FontSize',14);
+
+%Autocorrelation
+acf = zeros(49,12);
+[acf(:,1)] = autocorr(hnoise_jan,48);
+[acf(:,2)] = autocorr(hnoise_feb,48);
+[acf(:,3)] = autocorr(hnoise_mar,48);
+[acf(:,4)] = autocorr(hnoise_apr,48);
+[acf(:,5)] = autocorr(hnoise_may,48);
+[acf(:,6)] = autocorr(hnoise_jun,48);
+[acf(:,7)] = autocorr(hnoise_jul,48);
+[acf(:,8)] = autocorr(hnoise_aug,48);
+[acf(:,9)] = autocorr(hnoise_sep,48);
+[acf(:,10)] = autocorr(hnoise_oct,48);
+[acf(:,11)] = autocorr(hnoise_nov,48);
+[acf(:,12)] = autocorr(hnoise_dec,48);
+
+% plot hourly autocorrelation
+figure; 
+hold on; 
+for i = 1:12
+    plot(acf(:,i));
+end
+legend('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+xlabel('Lags (hours)','FontSize',14);
+ylabel('Autocorrelation','FontSize',14);
