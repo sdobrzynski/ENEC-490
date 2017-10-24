@@ -1,0 +1,55 @@
+%Lecture18
+
+%Define state vector
+% 1 - sunny; 2 - rainy
+
+x = [0 1];
+P = [.9 .1; .5 .5];
+
+% Probability of weather 10 days from now
+x_n = zeros(10,2);
+for i = 1:10
+    x_n(i,:) = x*P^i;
+end
+
+% Steady state probability
+
+% q (P - I) = 0
+
+P_I = P - [1 0;0 1];
+
+% Solve system of equations 
+% -.1(q1) + .5(q2) = 0
+%  .1(q1) - .5(q2) = 0
+%   q1 + q2 = 1
+
+q1 = .5/.6;
+q2 = 1-q1;
+[q1 q2]
+
+sunny = q1*365
+rainy = q2*365
+
+%EXAMPLE
+% 0 - professional, 1 - skilled, 2 - unskilled
+Pw = [0.8 0.1 0.1;0.6 0.2 0.2;0.5 0.25 0.25];
+xw = [0 0 1];
+xw_n = zeros(2,3);
+for i = 1:2
+    xw_n(i,:) = xw*Pw^i;
+end
+
+% Steady state probability
+
+% q (P - I) = 0
+
+Pw_I = Pw - [1 0 0;0 1 0;0 0 1]
+%(-0.2)q1 + (0.6)q2 + (0.5)q3 = 0
+%(0.1)q1 - (0.8)q2 + (0.25)q3 = 0
+% (0.1)q1 + (0.2)q2 -(0.75)q3 = 0
+% q1 +q2 +q3 = 1
+A = [-0.2 0.6 0.5;0.1 -0.8 0.25;0.1 0.2 -0.75;1 1 1];
+b = [0;0;0;1];
+q = A\b
+
+%takes 8 generations
